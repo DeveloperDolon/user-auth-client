@@ -53,6 +53,12 @@ const Signup = () => {
               name="password"
               rules={[
                 { required: true, message: "Please input your password!" },
+                {
+                  pattern:
+                    /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
+                  message:
+                    "Password must be at least 8 characters, include a number and a special character!",
+                },
               ]}
             >
               <Input.Password placeholder="Enter password" />
@@ -61,7 +67,17 @@ const Signup = () => {
             <Form.Item<FieldType>
               label="Shop Names"
               name="shopNames"
-              rules={[{ required: true, message: "Please input shop names!" }]}
+              rules={[
+                { required: true, message: "Please input shop names!" },
+                {
+                  validator: (_, value) =>
+                    Array.isArray(value) && value.length >= 3
+                      ? Promise.resolve()
+                      : Promise.reject(
+                          new Error("Please enter at least 3 shop names!")
+                        ),
+                },
+              ]}
             >
               <Select
                 mode="tags"
