@@ -28,6 +28,7 @@ const Signin = () => {
     >
       <ResponsiveContainer className="flex justify-center items-center h-screen">
         <div className="bg-white md:min-w-[600px] max: mx-auto p-6 rounded-lg bg-opacity-50">
+            <h1 className="text-center md:text-3xl text-2xl font-semibold mb-5">Sign in</h1>
           <Form
             name="basic"
             labelCol={{ span: 8 }}

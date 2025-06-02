@@ -28,6 +28,9 @@ const Signup = () => {
     >
       <ResponsiveContainer className="flex justify-center items-center h-screen">
         <div className="bg-white md:min-w-[600px] max: mx-auto p-6 rounded-lg bg-opacity-50">
+          <h1 className="text-center md:text-3xl text-2xl font-semibold mb-5">
+            Sign up
+          </h1>
           <Form
             name="basic"
             labelCol={{ span: 8 }}
@@ -98,7 +101,10 @@ const Signup = () => {
 
           <div>
             <p className="text-center text-gray-500 mt-4">
-              Already have an account? <Link className="text-white" to="/signin">Sign In</Link>
+              Already have an account?{" "}
+              <Link className="text-white" to="/signin">
+                Sign In
+              </Link>
             </p>
           </div>
         </div>
