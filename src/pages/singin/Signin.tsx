@@ -1,12 +1,12 @@
 import backgroundImage from "../../assets/signupbg.jpg";
 import ResponsiveContainer from "../../components/ResponsiveContainer";
 import type { FormProps } from "antd";
-import { Button, Form, Input, Select } from "antd";
+import { Button, Checkbox, Form, Input } from "antd";
 
 type FieldType = {
   username?: string;
   password?: string;
-  shopNames?: string[];
+  remember?: string;
 };
 
 const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
@@ -17,7 +17,7 @@ const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
   console.log("Failed:", errorInfo);
 };
 
-const Signup = () => {
+const Signin = () => {
   return (
     <div
       className="min-h-screen"
@@ -52,40 +52,17 @@ const Signup = () => {
               name="password"
               rules={[
                 { required: true, message: "Please input your password!" },
-                {
-                  pattern:
-                    /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
-                  message:
-                    "Password must be at least 8 characters, include a number and a special character!",
-                },
               ]}
             >
               <Input.Password placeholder="Enter password" />
             </Form.Item>
 
             <Form.Item<FieldType>
-              label="Shop Names"
-              name="shopNames"
-              rules={[
-                { required: true, message: "Please input shop names!" },
-                {
-                  validator: (_, value) =>
-                    Array.isArray(value) && value.length >= 3
-                      ? Promise.resolve()
-                      : Promise.reject(
-                          new Error("Please enter at least 3 shop names!")
-                        ),
-                },
-              ]}
+              name="remember"
+              valuePropName="checked"
+              label={null}
             >
-              <Select
-                mode="tags"
-                placeholder="Enter shop names and hit enter"
-                style={{ width: "100%" }}
-                showSearch={false}
-                dropdownStyle={{ display: "none" }}
-                tokenSeparators={[","]}
-              />
+              <Checkbox>Remember me</Checkbox>
             </Form.Item>
 
             <Form.Item label={null}>
@@ -100,4 +77,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Signin;
