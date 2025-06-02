@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import backgroundImage from "../../assets/signupbg.jpg";
 import ResponsiveContainer from "../../components/ResponsiveContainer";
 import type { FormProps } from "antd";
@@ -71,6 +72,15 @@ const Signin = () => {
               </Button>
             </Form.Item>
           </Form>
+
+          <div>
+            <p className="text-center text-gray-500">
+              Don't have an account?{" "}
+              <Link to="/signup" className="text-white hover:underline">
+                Sign up
+              </Link>
+            </p>
+          </div>
         </div>
       </ResponsiveContainer>
     </div>

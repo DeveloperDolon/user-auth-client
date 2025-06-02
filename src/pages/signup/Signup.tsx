@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import backgroundImage from "../../assets/signupbg.jpg";
 import ResponsiveContainer from "../../components/ResponsiveContainer";
 import type { FormProps } from "antd";
@@ -94,6 +95,12 @@ const Signup = () => {
               </Button>
             </Form.Item>
           </Form>
+
+          <div>
+            <p className="text-center text-gray-500 mt-4">
+              Already have an account? <Link className="text-white" to="/signin">Sign In</Link>
+            </p>
+          </div>
         </div>
       </ResponsiveContainer>
     </div>
