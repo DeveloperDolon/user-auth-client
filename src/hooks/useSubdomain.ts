@@ -4,7 +4,7 @@ export const useSubdomain = () => {
   return useMemo(() => {
     const hostname = window.location.hostname;
     const isSubdomain =
-      hostname !== "localhost" && hostname.includes(".localhost");
+      hostname !== import.meta.env.VITE_HOSTNAME && hostname.includes(import.meta.env.VITE_HOSTNAME);
     const shopName = isSubdomain ? hostname.split(".")[0] : null;
     const isMainDomain = !isSubdomain;
 

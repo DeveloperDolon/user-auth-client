@@ -7,7 +7,7 @@ const baseQuery = fetchBaseQuery({
     prepareHeaders: (
         headers,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        { getState, extra, endpoint, type, forced, arg }
+        { arg }
     ) => {
         const token =
             typeof window !== "undefined" ? TokenManager.getToken() : null;

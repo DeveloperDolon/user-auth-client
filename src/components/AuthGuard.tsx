@@ -15,7 +15,7 @@ const AuthGuard = ({ children }: { children: ReactNode }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { isAuthenticated, verifying, user } = useSelector(
+  const { isAuthenticated, verifying } = useSelector(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (state: any) => state.auth
   );
@@ -58,7 +58,7 @@ const AuthGuard = ({ children }: { children: ReactNode }) => {
   if (!isAuthenticated) {
     console.log("Is authenticated" + isAuthenticated);
     if (isSubdomain) {
-      window.location.href = `http://localhost:5173/signin?redirect=${encodeURIComponent(
+      window.location.href = `${import.meta.env.VITE_WEBSITE_URL}:${import.meta.env.VITE_PORT}/signin?redirect=${encodeURIComponent(
         window.location.href
       )}`;
       return null;

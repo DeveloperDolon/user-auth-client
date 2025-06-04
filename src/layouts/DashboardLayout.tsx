@@ -76,7 +76,7 @@ export default function DashboardLayout() {
               items: [
                 ...(user?.data?.shopNames ?? []).map((item: string, idx: number) => ({
                   key: idx,
-                  label: <Link to={`http://${item}.localhost:5173`}><Button type="text">{item}</Button></Link>,
+                  label: <Link to={`http://${item}.${import.meta.env.VITE_HOSTNAME}:${import.meta.env.VITE_PORT}`}><Button type="text">{item}</Button></Link>,
                 })),
                 {
                   key: "logout",
