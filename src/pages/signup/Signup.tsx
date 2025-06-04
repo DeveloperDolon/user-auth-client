@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import backgroundImage from "../../assets/signupbg.jpg";
 import ResponsiveContainer from "../../components/ResponsiveContainer";
 import type { FormProps } from "antd";
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, message, Select } from "antd";
+import { useSignupMutation } from "../../stores/api/auth";
 
 type FieldType = {
   username?: string;
@@ -10,15 +11,40 @@ type FieldType = {
   shopNames?: string[];
 };
 
-const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-  console.log("Success:", values);
-};
-
-const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
-
 const Signup = () => {
+  const [signup] = useSignupMutation();
+  const [messageApi, contextHolder] = message.useMessage();
+  const key = "updatable";
+
+  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+    messageApi.open({
+      key,
+      type: "loading",
+      content: "User registering...",
+    });
+    try {
+      const response = await signup(values).unwrap();
+      console.log(response)
+      if (response) {
+        messageApi.open({
+          key,
+          type: "success",
+          content: "Signup successful!",
+          duration: 2,
+        });
+      }
+      // P@ssword123
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      messageApi.open({
+        key,
+        type: "error",
+        content: error?.data?.message || "Signup failed!",
+        duration: 2,
+      });
+    }
+  };
+
   return (
     <div
       className="min-h-screen"
@@ -26,6 +52,7 @@ const Signup = () => {
         background: `url(${backgroundImage}) no-repeat center right fixed`,
       }}
     >
+      {contextHolder}
       <ResponsiveContainer className="flex justify-center items-center h-screen">
         <div className="bg-white md:min-w-[600px] max: mx-auto p-6 rounded-lg bg-opacity-50">
           <h1 className="text-center md:text-3xl text-2xl font-semibold mb-5">
@@ -38,7 +65,6 @@ const Signup = () => {
             style={{ maxWidth: 600 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
             <Form.Item<FieldType>
