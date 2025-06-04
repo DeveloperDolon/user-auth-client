@@ -12,6 +12,7 @@ type FieldType = {
 };
 
 const Signup = () => {
+  const [form] = Form.useForm();
   const [signup] = useSignupMutation();
   const [messageApi, contextHolder] = message.useMessage();
   const key = "updatable";
@@ -24,7 +25,7 @@ const Signup = () => {
     });
     try {
       const response = await signup(values).unwrap();
-      console.log(response)
+
       if (response) {
         messageApi.open({
           key,
@@ -32,9 +33,9 @@ const Signup = () => {
           content: "Signup successful!",
           duration: 2,
         });
+        form.resetFields();
       }
-      // P@ssword123
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       messageApi.open({
         key,
@@ -59,6 +60,7 @@ const Signup = () => {
             Sign up
           </h1>
           <Form
+            form={form}
             name="basic"
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
