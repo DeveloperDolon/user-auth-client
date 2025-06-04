@@ -27,8 +27,8 @@ const AuthGuard = ({ children }: {children: ReactNode}) => {
       verifyToken(token)
         .unwrap()
         .then((result) => {
-          if (result.success) {
-            dispatch(verifySuccess(result.data));
+          if (result.payload) {
+            dispatch(verifySuccess(result.payload));
           } else {
             dispatch(verifyFailure());
           }
@@ -49,7 +49,7 @@ const AuthGuard = ({ children }: {children: ReactNode}) => {
       </div>
     );
   }
-
+  
   if (!isAuthenticated) {
     if (isSubdomain) {
       window.location.href = `http://localhost:5173/signin?redirect=${encodeURIComponent(

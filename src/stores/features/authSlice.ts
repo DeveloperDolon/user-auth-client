@@ -1,24 +1,42 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { TokenManager } from '../../utils/tokenManager';
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { TokenManager } from "../../utils/tokenManager";
 
-const initialState = {
+interface User {
+  id: string;
+  username: string;
+  shopNames: string[];
+}
+
+interface AuthState {
+  user: User | null;
+  token: string | null;
+  isAuthenticated: boolean;
+  loading: boolean;
+  verifying: boolean;
+  error: string | null;
+}
+
+const initialState: AuthState = {
   user: null,
   token: TokenManager.getToken(),
   isAuthenticated: false,
   loading: false,
   verifying: false,
-  error: null
+  error: null,
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     loginStart: (state) => {
       state.loading = true;
       state.error = null;
     },
-    loginSuccess: (state, action) => {
+    loginSuccess: (
+      state,
+      action: PayloadAction<{ user: User; token: string }>
+    ) => {
       state.loading = false;
       state.user = action.payload.user;
       state.token = action.payload.token;
@@ -26,7 +44,7 @@ const authSlice = createSlice({
       state.error = null;
       TokenManager.setToken(action.payload.token);
     },
-    loginFailure: (state, action) => {
+    loginFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
       state.isAuthenticated = false;
@@ -34,7 +52,8 @@ const authSlice = createSlice({
     verifyStart: (state) => {
       state.verifying = true;
     },
-    verifySuccess: (state, action) => {
+    verifySuccess: (state, action: PayloadAction<User>) => {
+        console.log(action)
       state.verifying = false;
       state.user = action.payload;
       state.isAuthenticated = true;
@@ -56,8 +75,8 @@ const authSlice = createSlice({
     },
     clearError: (state) => {
       state.error = null;
-    }
-  }
+    },
+  },
 });
 
 export const {
@@ -68,7 +87,7 @@ export const {
   verifySuccess,
   verifyFailure,
   logout,
-  clearError
+  clearError,
 } = authSlice.actions;
 
-export default authSlice;
+export default authSlice.reducer;

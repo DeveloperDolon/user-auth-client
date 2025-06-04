@@ -3,6 +3,7 @@ import Signup from "../pages/signup/Signup";
 import Signin from "../pages/singin/Signin";
 import DashboardLayout from "../layouts/DashboardLayout";
 import AuthGuard from "../components/AuthGuard";
+import Home from "../pages/home/Home";
 
 const routes = createBrowserRouter([
   {
@@ -12,6 +13,10 @@ const routes = createBrowserRouter([
   {
     path: "/signin",
     element: <Signin />,
+  },
+  {
+    path: "/",
+    element: <Home/>, 
   },
   {
     path: "/dashboard",
