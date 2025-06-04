@@ -26,7 +26,7 @@ const Signin = () => {
     });
     try {
       const response = await login(values).unwrap();
-      console.log(response);
+      
       if (response) {
         messageApi.open({
           key,
@@ -35,7 +35,7 @@ const Signin = () => {
           duration: 2,
         });
         storeToken(response?.data?.accessToken);
-        navigate("/signin");
+        navigate("/dashboard");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
