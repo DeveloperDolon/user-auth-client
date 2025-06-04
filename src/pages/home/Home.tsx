@@ -1,5 +1,7 @@
+import { Button } from "antd";
 import ResponsiveContainer from "../../components/ResponsiveContainer";
 import { useSubdomain } from "../../hooks/useSubdomain";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const { isSubdomain, shopName } = useSubdomain();
@@ -13,7 +15,15 @@ const Home = () => {
             shop
           </>
         ) : (
-          "Welcome to the main domain"
+          <>
+            <span>Welcome to the main domain</span>
+            <br />
+            <Link to={"/signin"}>
+              <Button color="blue" variant="filled" size="large">
+                Sign in
+              </Button>
+            </Link>
+          </>
         )}
       </h1>
     </ResponsiveContainer>
