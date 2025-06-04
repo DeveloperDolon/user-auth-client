@@ -1,6 +1,6 @@
-import { UserOutlined } from "@ant-design/icons";
+import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { Avatar, Badge, Breadcrumb, Layout, Menu, Space, theme } from "antd";
+import { Avatar, Breadcrumb, Button, Dropdown, Layout, Menu, Space, theme } from "antd";
 import { dashboard_items } from "../constants/dashboard_items";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -18,7 +18,7 @@ export default function DashboardLayout() {
   } = theme.useToken();
 
   const location = useLocation();
-  const pathArray = (location.pathname).split("/");
+  const pathArray = location.pathname.split("/");
 
   const breadcrumbItems = pathArray.map((item: string) => {
     return {
@@ -28,6 +28,11 @@ export default function DashboardLayout() {
         .join(" "),
     };
   });
+
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    navigate("/signin");
+  };
 
   if (!isFetching) {
     if (!user?.success) {
@@ -65,11 +70,28 @@ export default function DashboardLayout() {
           }}
         >
           <div></div>
-          <Space size={24}>
-            <Badge count={1}>
-              <Avatar shape="square" icon={<UserOutlined />} />
-            </Badge>
-          </Space>
+          <Dropdown
+            menu={{
+              items: [
+                ...(user?.data?.shopNames ?? []).map((item: string, idx: number) => ({
+                  key: idx,
+                  label: <Button type="text">{item}</Button>,
+                })),
+                {
+                  key: "logout",
+                  label: <Button icon={<LogoutOutlined />}>Logout</Button>,
+                  onClick: logout,
+                },
+              ],
+            }}
+            trigger={["click"]}
+          >
+            <a onClick={(e) => e.preventDefault()}>
+              <Space size={24}>
+                <Avatar shape="square" icon={<UserOutlined />} />
+              </Space>
+            </a>
+          </Dropdown>
         </Header>
         <Content style={{ margin: "0 16px" }}>
           <Breadcrumb items={breadcrumbItems} style={{ margin: "16px 0" }} />
@@ -82,7 +104,7 @@ export default function DashboardLayout() {
               borderRadius: borderRadiusLG,
             }}
           >
-            <Outlet/>
+            <Outlet />
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
