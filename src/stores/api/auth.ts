@@ -17,8 +17,8 @@ const authApi = baseApi.injectEndpoints({
       }),
     }),
     me: builder.query({
-        query: () => ('/auth/me'),
-    })
+      query: () => "/auth/me",
+    }),
   }),
 });
 

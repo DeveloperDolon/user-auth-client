@@ -1,19 +1,14 @@
-"use client";
 import { UserOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Avatar, Badge, Breadcrumb, Layout, Menu, Space, theme } from "antd";
-import { useMeQuery } from "../_store/api/auth.api";
 import { dashboard_items } from "../constants/dashboard_items";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { useMeQuery } from "../stores/api/auth";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const { data: user, isFetching } = useMeQuery(1);
   const navigate = useNavigate();
@@ -87,7 +82,7 @@ export default function DashboardLayout({
               borderRadius: borderRadiusLG,
             }}
           >
-            {children}
+            <Outlet/>
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
