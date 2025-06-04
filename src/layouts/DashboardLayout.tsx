@@ -2,9 +2,10 @@
 import { UserOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 import { Avatar, Badge, Breadcrumb, Layout, Menu, Space, theme } from "antd";
-import { dashboard_items } from "../_constants/dashboard_items";
-import { usePathname, useRouter } from "next/navigation";
 import { useMeQuery } from "../_store/api/auth.api";
+import { dashboard_items } from "../constants/dashboard_items";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -15,14 +16,14 @@ export default function DashboardLayout({
 }) {
   const [collapsed, setCollapsed] = useState(false);
   const { data: user, isFetching } = useMeQuery(1);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  const path = usePathname();
-  const pathArray = path.split("/");
+  const location = useLocation();
+  const pathArray = (location.pathname).split("/");
 
   const breadcrumbItems = pathArray.map((item: string) => {
     return {
@@ -35,7 +36,7 @@ export default function DashboardLayout({
 
   if (!isFetching) {
     if (!user?.success) {
-      router.push("/dashboard_login");
+      navigate("/signin");
     }
   }
 
@@ -90,8 +91,7 @@ export default function DashboardLayout({
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-        Dashboard ©{new Date().getFullYear()} Created by
-          DeveloperDolon
+          Dashboard ©{new Date().getFullYear()} Created by DeveloperDolon
         </Footer>
       </Layout>
     </Layout>
