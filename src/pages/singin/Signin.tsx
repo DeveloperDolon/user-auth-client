@@ -4,7 +4,7 @@ import ResponsiveContainer from "../../components/ResponsiveContainer";
 import type { FormProps } from "antd";
 import { Button, Checkbox, Form, Input, message } from "antd";
 import { useLoginMutation } from "../../stores/api/auth";
-import { storeToken } from "../../utils/authTokenManagement";
+import { TokenManager } from "../../utils/tokenManager";
 
 type FieldType = {
   username?: string;
@@ -34,7 +34,7 @@ const Signin = () => {
           content: "Login successful!",
           duration: 2,
         });
-        storeToken(response?.data?.accessToken);
+        TokenManager.setToken(response?.data?.accessToken);
         navigate("/dashboard");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

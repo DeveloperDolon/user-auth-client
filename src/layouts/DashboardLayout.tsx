@@ -2,7 +2,7 @@ import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { Avatar, Breadcrumb, Button, Dropdown, Layout, Menu, Space, theme } from "antd";
 import { dashboard_items } from "../constants/dashboard_items";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useMeQuery } from "../stores/api/auth";
 
@@ -75,7 +75,7 @@ export default function DashboardLayout() {
               items: [
                 ...(user?.data?.shopNames ?? []).map((item: string, idx: number) => ({
                   key: idx,
-                  label: <Button type="text">{item}</Button>,
+                  label: <Link to={`http://${item}.localhost:5173`}><Button type="text">{item}</Button></Link>,
                 })),
                 {
                   key: "logout",

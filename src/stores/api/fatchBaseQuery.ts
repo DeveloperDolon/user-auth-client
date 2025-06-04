@@ -1,5 +1,6 @@
 import { type FetchArgs, fetchBaseQuery } from "@reduxjs/toolkit/query";
 import type { BaseQueryApi } from "@reduxjs/toolkit/query";
+import { TokenManager } from "../../utils/tokenManager";
 
 const baseQuery = fetchBaseQuery({
     baseUrl: import.meta.env.VITE_API_BASE_URL,
@@ -9,7 +10,7 @@ const baseQuery = fetchBaseQuery({
         { getState, extra, endpoint, type, forced, arg }
     ) => {
         const token =
-            typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+            typeof window !== "undefined" ? TokenManager.getToken() : null;
         if (token) {
             headers.set("Authorization", `Bearer ${token}`);
         }
@@ -38,7 +39,7 @@ export const baseQueryWithAuth = async (
   ) {
     console.log("Access token expired or invalid. Logging out...");
 
-    localStorage.removeItem("authToken");
+    TokenManager.removeToken();
 
     window.location.href = "/dashboard_login";
   }

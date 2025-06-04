@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Signup from "../pages/signup/Signup";
 import Signin from "../pages/singin/Signin";
 import DashboardLayout from "../layouts/DashboardLayout";
+import AuthGuard from "../components/AuthGuard";
 
 const routes = createBrowserRouter([
   {
@@ -10,18 +11,26 @@ const routes = createBrowserRouter([
   },
   {
     path: "/signin",
-    element: <Signin />
+    element: <Signin />,
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout />,
+    element: (
+      <AuthGuard>
+        <DashboardLayout />
+      </AuthGuard>
+    ),
     children: [
       {
         path: "/dashboard/",
-        element: <div>Dashboard Home</div>
-      }
-    ]
-  }
+        element: (
+          <AuthGuard>
+            <div>Dashboard Home</div>
+          </AuthGuard>
+        ),
+      },
+    ],
+  },
 ]);
 
 export default routes;
