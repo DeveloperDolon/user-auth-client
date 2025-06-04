@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import backgroundImage from "../../assets/signupbg.jpg";
 import ResponsiveContainer from "../../components/ResponsiveContainer";
 import type { FormProps } from "antd";
@@ -16,6 +16,7 @@ const Signup = () => {
   const [signup] = useSignupMutation();
   const [messageApi, contextHolder] = message.useMessage();
   const key = "updatable";
+  const navigate = useNavigate();
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     messageApi.open({
@@ -34,6 +35,7 @@ const Signup = () => {
           duration: 2,
         });
         form.resetFields();
+        navigate("/signin");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import backgroundImage from "../../assets/signupbg.jpg";
 import ResponsiveContainer from "../../components/ResponsiveContainer";
 import type { FormProps } from "antd";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, message } from "antd";
+import { useLoginMutation } from "../../stores/api/auth";
+import { storeToken } from "../../utils/authTokenManagement";
 
 type FieldType = {
   username?: string;
@@ -10,15 +12,42 @@ type FieldType = {
   remember?: string;
 };
 
-const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-  console.log("Success:", values);
-};
-
-const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
-
 const Signin = () => {
+  const [messageApi, contextHolder] = message.useMessage();
+  const key = "updatable";
+  const navigate = useNavigate();
+  const [login] = useLoginMutation();
+
+  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+    messageApi.open({
+      key,
+      type: "loading",
+      content: "User finding...",
+    });
+    try {
+      const response = await login(values).unwrap();
+      console.log(response);
+      if (response) {
+        messageApi.open({
+          key,
+          type: "success",
+          content: "Login successful!",
+          duration: 2,
+        });
+        storeToken(response?.data?.accessToken);
+        navigate("/signin");
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      messageApi.open({
+        key,
+        type: "error",
+        content: error?.data?.message || "Login failed!",
+        duration: 2,
+      });
+    }
+  };
+
   return (
     <div
       className="min-h-screen"
@@ -26,9 +55,12 @@ const Signin = () => {
         background: `url(${backgroundImage}) no-repeat center right fixed`,
       }}
     >
+      {contextHolder}
       <ResponsiveContainer className="flex justify-center items-center h-screen">
         <div className="bg-white md:min-w-[600px] max: mx-auto p-6 rounded-lg bg-opacity-50">
-            <h1 className="text-center md:text-3xl text-2xl font-semibold mb-5">Sign in</h1>
+          <h1 className="text-center md:text-3xl text-2xl font-semibold mb-5">
+            Sign in
+          </h1>
           <Form
             name="basic"
             labelCol={{ span: 8 }}
@@ -36,7 +68,6 @@ const Signin = () => {
             style={{ maxWidth: 600 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
             <Form.Item<FieldType>
