@@ -58,9 +58,9 @@ const AuthGuard = ({ children }: { children: ReactNode }) => {
   if (!isAuthenticated) {
     console.log("Is authenticated" + isAuthenticated);
     if (isSubdomain) {
-      window.location.href = `${import.meta.env.VITE_WEBSITE_URL}:${import.meta.env.VITE_PORT}/signin?redirect=${encodeURIComponent(
-        window.location.href
-      )}`;
+      window.location.href = `${
+        import.meta.env.VITE_WEBSITE_URL
+      }/signin?redirect=${encodeURIComponent(window.location.href)}`;
       return null;
     }
 

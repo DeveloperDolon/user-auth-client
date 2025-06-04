@@ -1,14 +1,24 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: "localhost",
-    port: 5173,
+    host: "0.0.0.0",
+    port: 5173, 
     cors: {
-      origin: /\.localhost:5173$/,
-    },
+      origin: [
+        /\.user-auth-client\.netlify\.app$/, 
+        "http://localhost:5173" 
+      ],
+      credentials: true
+    }
   },
+  build: {
+    outDir: "dist",
+    emptyOutDir: true
+  },
+  preview: {
+    port: 4173 
+  }
 });
