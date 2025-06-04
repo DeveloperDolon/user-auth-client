@@ -1,13 +1,17 @@
-import { useEffect, type ReactNode } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Navigate, useLocation } from 'react-router-dom';
-import { Spin } from 'antd';
-import { useLazyVerifyTokenQuery } from '../stores/api/auth';
+import { type ReactNode } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate, useLocation } from "react-router-dom";
+import { Spin } from "antd";
 import { TokenManager } from "../utils/tokenManager";
 import { useSubdomain } from "../hooks/useSubdomain";
-import { verifySuccess, verifyFailure, verifyStart } from "../stores/features/authSlice";
+import {
+  verifySuccess,
+  verifyFailure,
+  verifyStart,
+} from "../stores/features/authSlice";
+import { useVerifyTokenMutation } from "../stores/api/auth";
 
-const AuthGuard = ({ children }: {children: ReactNode}) => {
+const AuthGuard = ({ children }: { children: ReactNode }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -16,28 +20,29 @@ const AuthGuard = ({ children }: {children: ReactNode}) => {
     (state: any) => state.auth
   );
   const { isSubdomain } = useSubdomain();
-  const [verifyToken] = useLazyVerifyTokenQuery();
+  const [verifyToken] = useVerifyTokenMutation();
 
-  useEffect(() => {
+  const verifyAuth = async () => {
     const token = TokenManager.getToken();
 
     if (token && !isAuthenticated && !verifying) {
       dispatch(verifyStart());
 
-      verifyToken(token)
-        .unwrap()
-        .then((result) => {
-          if (result.payload) {
-            dispatch(verifySuccess(result.payload));
-          } else {
-            dispatch(verifyFailure());
-          }
-        })
-        .catch(() => {
+      try {
+        const result = await verifyToken(token).unwrap();
+        console.log(result);
+        if (result.success) {
+          dispatch(verifySuccess(result.data));
+        } else {
           dispatch(verifyFailure());
-        });
+        }
+      } catch {
+        dispatch(verifyFailure());
+      }
     }
-  }, [dispatch, verifyToken, isAuthenticated, verifying]);
+  };
+
+  verifyAuth();
 
   if (verifying) {
     return (
@@ -49,8 +54,9 @@ const AuthGuard = ({ children }: {children: ReactNode}) => {
       </div>
     );
   }
-  
+
   if (!isAuthenticated) {
+    console.log("Is authenticated" + isAuthenticated);
     if (isSubdomain) {
       window.location.href = `http://localhost:5173/signin?redirect=${encodeURIComponent(
         window.location.href

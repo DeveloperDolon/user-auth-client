@@ -8,7 +8,7 @@ const authApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ["User"],
     }),
     login: builder.mutation({
       query: (data) => ({
@@ -16,17 +16,25 @@ const authApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ["User"],
     }),
     me: builder.query({
       query: () => "/auth/me",
-      providesTags: ['User'],
+      providesTags: ["User"],
     }),
-    verifyToken: builder.query({
-      query: () => '/auth/verify',
-      providesTags: ['User'],
+    verifyToken: builder.mutation({
+      query: () => ({
+        url: "/auth/verify",
+        method: "POST",
+      }),
+      invalidatesTags: ["User"],
     }),
   }),
 });
 
-export const { useSignupMutation, useLoginMutation, useMeQuery, useLazyVerifyTokenQuery } = authApi;
+export const {
+  useSignupMutation,
+  useLoginMutation,
+  useMeQuery,
+  useVerifyTokenMutation,
+} = authApi;

@@ -1,6 +1,11 @@
+
+
 export const TokenManager = {
   setToken: (token: string) => {
-    document.cookie = `accessToken=${token}; path=/; domain=localhost; max-age=86400; SameSite=Lax`;
+    const hostname = window.location.hostname;
+    const domain =
+      hostname.endsWith(".localhost") ? hostname : "localhost";
+    document.cookie = `accessToken=${token}; path=/; domain=${domain}; max-age=86400; SameSite=Lax`;
     localStorage.setItem("accessToken", token);
   },
 

@@ -5,6 +5,7 @@ import { dashboard_items } from "../constants/dashboard_items";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useMeQuery } from "../stores/api/auth";
+import { TokenManager } from "../utils/tokenManager";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -30,7 +31,7 @@ export default function DashboardLayout() {
   });
 
   const logout = () => {
-    localStorage.removeItem("accessToken");
+    TokenManager.removeToken();
     navigate("/signin");
   };
 
